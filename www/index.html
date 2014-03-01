@@ -7,25 +7,20 @@
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>Wendel's Tip Calculator</title>
         
-        <script>
-            function tipCalculate(slider,bill){
-            var tip = document.getElementById('tip');
-            var slideval = document.getElementById('slideval');
-            var bill = document.getElementById(bill).value;
-            var prcnt = slider * .01;
-            tip.innerHTML = "$"+(bill * prcnt).toFixed(2);
-            slideval.innerHTML = slider+"%";
-            }
-        </script>
+<script>
+function convert(bill)
+{
+ tip=document.getElementById("bill").value * .15;
+ tip = tip.toFixed(2);
+ document.getElementById("tip").innerHTML="You Should Tip $"+ tip;
+ }
+</script>
     </head>
     <body>
     <h1 class='h1'>Wendel's Tip Calculator</h1>
-    <h2>Tip Calculator</h2>
-Enter the bill amount for your meal: $
-<input type="text" id="bill"><br>
-Tip Percentage: 
-<input type="range" min="0" max="100" value="0" step="1" onchange="tipCalculate(this.value,'bill')" style="width:400px;">
-<span id="slideval">0%</span>
-<h2>Tip to leave = <span id="tip"></span></h2>
+<form>
+<input id="bill" name="bill" placeholder="ENTER TOTAL BILL" onkeyup="convert('bill')"> <br>
+<span id="tip"></span>
+</form>
     </body>
 </html>
