@@ -1,6 +1,6 @@
 xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns   = "http://www.w3.org/ns/widgets"
-        xmlns:gap   = "http://phonegap.com/ns/3.0"
+        xmlns:gap   = "http://phonegap.com/ns/3.1.0"
         id          = "example.pcwendel.com"
 
     <name>Wendel's Example Phone App</name>
