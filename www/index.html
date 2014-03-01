@@ -5,20 +5,27 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>Wendel's Tip Calculator</title>
+        
+        <script>
+            function tipCalculate(slider,bill){
+            var tip = document.getElementById('tip');
+            var slideval = document.getElementById('slideval');
+            var bill = document.getElementById(bill).value;
+            var prcnt = slider * .01;
+            tip.innerHTML = "$"+(bill * prcnt).toFixed(2);
+            slideval.innerHTML = slider+"%";
+            }
+        </script>
     </head>
     <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script type="text/javascript" src="phonegap.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
+    <h1 class='h1'>Wendel's Tip Calculator</h1>
+    <h2>Tip Calculator</h2>
+Enter the bill amount for your meal: $
+<input type="text" id="bill"><br>
+Tip Percentage: 
+<input type="range" min="0" max="100" value="0" step="1" onchange="tipCalculate(this.value,'bill')" style="width:400px;">
+<span id="slideval">0%</span>
+<h2>Tip to leave = <span id="tip"></span></h2>
     </body>
 </html>
