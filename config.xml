@@ -12,7 +12,6 @@ xml version="1.0" encoding="UTF-8" ?>
     <author href="https://pcwendel.com" email="support@pcwendel.com">
         Wendel M. Hullihen
     </author>
-
-</widget>
 <plugin name="File" value="org.apache.cordova.FileUtils" />
 <plugin name="FileTransfer" value="org.apache.cordova.FileTransfer" />
+</widget>
