@@ -4,11 +4,6 @@
 <script type="text/javascript">
 var db = openDatabase('mydb', '1.0', 'WHDB', 2 * 1024 * 1024);
 var msg;
-/*
-db.transaction(function (tx) {
-  tx.executeSql('DROP TABLE STUDENTS');
-});
-*/
 
 db.transaction(function (tx) {
   tx.executeSql('CREATE TABLE IF NOT EXISTS STUDENTS (id INTEGER PRIMARY KEY AUTOINCREMENT, sname, score)');
@@ -18,63 +13,131 @@ db.transaction(function (tx) {
   tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
    var len = results.rows.length, i;
      for (i = 0; i < len; i++){
-     msg = "<p>" + results.rows.item(i).sname + "</a> - "+ results.rows.item(i).score + "</p>";
+     msg = "<p>" + results.rows.item(i).sname + " - "+ results.rows.item(i).score + "</p>";
      document.querySelector('#status').innerHTML +=  msg;
    }
  }, null);
-});
-</script>
-</head>
-<body>
-<div id="status" name="status"></div>
-<hr/>
-
-
-
-<!-- form -->
-<h3>ADD</h3>
-<form id="add">
-<input id="inputsname" name="inputsname" type="text" value="">
-<input type="button" onclick="myFunction1()" value="SUBMIT">
-</form>
-<!--end form -->
-<hr/>
-<h3>DELETE</h3>
-<form id="delete">
-<input id="deletename" name="deletename" type="text" value="">
-<input type="button" onclick="delete1()" value="SUBMIT">
-</form>
-<hr/>
-<button onclick="drop()">drop</button>
-
-
-<script>
+}
+);
+db.transaction(function (tx) {
+  tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
+   var len = results.rows.length, i;
+     for (i = 0; i < len; i++){
+     names ="<option value="+ results.rows.item(i).id+ ">" + results.rows.item(i).sname + "</option>";
+	      document.querySelector('#status2').innerHTML +=  names;
+   }
+ }, null);
+}
+);
 function myFunction1()
 {
 var a=document.forms["add"]["inputsname"].value;
 db.transaction(function (tx) {
   tx.executeSql('INSERT INTO STUDENTS (id, sname, score) VALUES (NULL, "' + a + '",0)');
  });
+ 
+var node = document.getElementById('status');
+while (node.hasChildNodes()) {
+    node.removeChild(node.firstChild);
+}
+db.transaction(function (tx) {
+  tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
+   var len = results.rows.length, i;
+     for (i = 0; i < len; i++){
+     msg = "<p>" + results.rows.item(i).sname + " - "+ results.rows.item(i).score + "</p>";
+     document.querySelector('#status').innerHTML +=  msg;
+   }
+ }, null);
+}
+);
+   
+var node = document.getElementById('status2');
+while (node.hasChildNodes()) {
+    node.removeChild(node.firstChild);
+}
+db.transaction(function (tx) {
+  tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
+   var len = results.rows.length, i;
+     for (i = 0; i < len; i++){
+     names ="<option value="+ results.rows.item(i).id+ ">" + results.rows.item(i).sname + "</option>";
+	      document.querySelector('#status2').innerHTML +=  names;
+   }
+ }, null);
+}
+);   
+   
 }
 
 function delete1()
 {
-var dn=document.forms["delete"]["deletename"].value;
- console.log(dn);
+var dn=document.forms["delete"]["status2"].value;
 db.transaction(function (tx) {
-  tx.executeSql('DELETE FROM STUDENTS WHERE sname = "' + dn + '"');
+  tx.executeSql('DELETE FROM STUDENTS WHERE id =  "' + dn + '"');
  });
+var node = document.getElementById('status');
+while (node.hasChildNodes()) {
+    node.removeChild(node.firstChild);
 }
-
-function drop()
-{
 db.transaction(function (tx) {
-  tx.executeSql('DROP TABLE STUDENTS');
-});
+  tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
+   var len = results.rows.length, i;
+     for (i = 0; i < len; i++){
+     msg = "<p>" + results.rows.item(i).sname + " - "+ results.rows.item(i).score + "</p>";
+     document.querySelector('#status').innerHTML +=  msg;
+   }
+ }, null);
 }
+);
+   
+var node = document.getElementById('status2');
+while (node.hasChildNodes()) {
+    node.removeChild(node.firstChild);
+}
+db.transaction(function (tx) {
+  tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
+   var len = results.rows.length, i;
+     for (i = 0; i < len; i++){
+     names ="<option value="+ results.rows.item(i).id+ ">" + results.rows.item(i).sname + "</option>";
+	      document.querySelector('#status2').innerHTML +=  names;
+   }
+ }, null);
+}
+);   
+   
+}
+function incorrect(){
+db.transaction(function (tx) {
+  tx.executeSql('UPDATE STUDENTS SET SCORE = SCORE + 1 WHERE NAME IS TONYA');
+ });  
+  
+}
+
 </script>
+</head>
+
+<body>
+<h3>Score Table</h3>
+<div id="status" name="status"></div>
+<hr/>
 
 
+<h3>ADD</h3>
+<form id="add" action="">
+<input id="inputsname" name="inputsname" type="text" value="">
+<input type="button" onclick="myFunction1()" value="SUBMIT">
+</form>
+<hr/>
 
+<h3>DELETE</h3>
+<form id="delete">
+<select id="status2">
+</select>
+<input type="button" onclick="delete1()" value="SUBMIT">
+</form>
+<hr/>
+<h3>PLAY</h3>
+<input type="button" onclick="correct()" value="Y">
+<input type="button" onclick="incorrect()" value="N">
+<hr/>
 </body>
 </html>
