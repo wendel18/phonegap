@@ -1,52 +1,32 @@
+<!DOCTYPE HTML>
 <html>
-  <head>
-    $(function(){
-    var demoRunning = false;
-    
-    $("#startTest").click(function(){
-        if(!demoRunning){
-            $(this).addClass("running");
-            $("#demoRunning").show();
-            $("#results").text("running...");
-            demoRunning = true;
-            try {
-                html5sql.openDatabase("demo", "Demo Database", 5*1024*1024);
-           
-                $.get('demo-statements.sql',function(sql){
-                    var startTime = new Date();
-                    html5sql.process(
-                        sql,
-                        function(){ //Success
-                            var endTime = new Date();
-                            $("#results").text("Table with 11000 entries created in: " +
-                                                ((endTime - startTime) / 1000) + "s");
-                            $("#startTest").removeClass("running");
-                            $("#demoRunning").hide();
-                            demoRunning = false;
-                        },
-                        function(error, failingQuery){ //Failure
-                            $("#results").text("Error: " + error.message);
-                            $("#startTest").removeClass("running");
-                            $("#demoRunning").hide();
-                            demoRunning = false;
-                        }
-                    );
-                });
-            
-            } catch (error) {
-                $("#results").text("Error: " + error.message);
-                $("#startTest").removeClass("running");
-                $("#demoRunning").hide();
-                demoRunning = false;
-            }
-        }
-    })
+<head>
+<script type="text/javascript">
+var db = openDatabase('mydb', '1.0', 'WHDB', 2 * 1024 * 1024);
+var msg;
+
+db.transaction(function (tx) {
+  tx.executeSql('DROP TABLE STUDENTS');
 });
-    
-  </head>
-  <body>
-    
-    
-    
-  </body>
+
+db.transaction(function (tx) {
+  tx.executeSql('CREATE TABLE IF NOT EXISTS STUDENTS (id unique, sname, score)');
+  tx.executeSql('INSERT INTO STUDENTS (id, sname, score) VALUES (1, "Wendel", "5")');
+  tx.executeSql('INSERT INTO STUDENTS (id, sname, score) VALUES (2, "Tom", "5")');
+});
+
+db.transaction(function (tx) {
+  tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
+   var len = results.rows.length, i;
+     for (i = 0; i < len; i++){
+     msg = "<p><b>" + results.rows.item(i).sname + " "+ results.rows.item(i).score + "</b></p>";
+     document.querySelector('#status').innerHTML +=  msg;
+   }
+ }, null);
+});
+</script>
+</head>
+<body>
+<div id="status" name="status">Status Message</div>
+</body>
 </html>
