@@ -1,62 +1,52 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>FileReader Example</title>
-
-    <script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-    <script type="text/javascript" charset="utf-8">
-
-    // Wait for PhoneGap to load
-    //
-    function onLoad() {
-        document.addEventListener("deviceready", onDeviceReady, false);
-    }
-
-    // PhoneGap is ready
-    //
-    function onDeviceReady() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("readme.txt", null, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.file(gotFile, fail);
-    }
-
-    function gotFile(file){
-        readDataUrl(file);
-        readAsText(file);
-    }
-
-    function readDataUrl(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            console.log("Read as data URL");
-            console.log(evt.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function readAsText(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            console.log("Read as text");
-            console.log(evt.target.result);
-        };
-        reader.readAsText(file);
-    }
-
-    function fail(evt) {
-        console.log(evt.target.error.code);
-    }
-
-    </script>
+    $(function(){
+    var demoRunning = false;
+    
+    $("#startTest").click(function(){
+        if(!demoRunning){
+            $(this).addClass("running");
+            $("#demoRunning").show();
+            $("#results").text("running...");
+            demoRunning = true;
+            try {
+                html5sql.openDatabase("demo", "Demo Database", 5*1024*1024);
+           
+                $.get('demo-statements.sql',function(sql){
+                    var startTime = new Date();
+                    html5sql.process(
+                        sql,
+                        function(){ //Success
+                            var endTime = new Date();
+                            $("#results").text("Table with 11000 entries created in: " +
+                                                ((endTime - startTime) / 1000) + "s");
+                            $("#startTest").removeClass("running");
+                            $("#demoRunning").hide();
+                            demoRunning = false;
+                        },
+                        function(error, failingQuery){ //Failure
+                            $("#results").text("Error: " + error.message);
+                            $("#startTest").removeClass("running");
+                            $("#demoRunning").hide();
+                            demoRunning = false;
+                        }
+                    );
+                });
+            
+            } catch (error) {
+                $("#results").text("Error: " + error.message);
+                $("#startTest").removeClass("running");
+                $("#demoRunning").hide();
+                demoRunning = false;
+            }
+        }
+    })
+});
+    
   </head>
   <body>
-    <h1>Example</h1>
-    <p>Read File</p>
+    
+    
+    
   </body>
 </html>
