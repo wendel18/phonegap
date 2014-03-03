@@ -1,6 +1,6 @@
 xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns   = "http://www.w3.org/ns/widgets"
-        xmlns:gap   = "http://phonegap.com/ns/3.0"
+        xmlns:gap   = "http://phonegap.com/ns/3.1.0"
         id          = "example.pcwendel.com"
 
     <name>Wendel's Example Phone App</name>
@@ -13,8 +13,10 @@ xml version="1.0" encoding="UTF-8" ?>
         Wendel M. Hullihen
     </author>
    
-    
-    
-<plugin name="File" value="org.apache.cordova.FileUtils" />
-<plugin name="FileTransfer" value="org.apache.cordova.FileTransfer" />
+<feature name="File">
+    <param name="android-package" value="org.apache.cordova.FileUtils" />
+</feature>
+<feature name="FileTransfer">
+    <param name="android-package" value="org.apache.cordova.FileTransfer" />
+</feature>
 </widget>
