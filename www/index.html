@@ -4,22 +4,21 @@
 <script type="text/javascript">
 var db = openDatabase('mydb', '1.0', 'WHDB', 2 * 1024 * 1024);
 var msg;
-
+/*
 db.transaction(function (tx) {
   tx.executeSql('DROP TABLE STUDENTS');
 });
+*/
 
 db.transaction(function (tx) {
-  tx.executeSql('CREATE TABLE IF NOT EXISTS STUDENTS (id unique, sname, score)');
-  tx.executeSql('INSERT INTO STUDENTS (id, sname, score) VALUES (1, "Wendel", "5")');
-  tx.executeSql('INSERT INTO STUDENTS (id, sname, score) VALUES (2, "Tom", "5")');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS STUDENTS (id INTEGER PRIMARY KEY AUTOINCREMENT, sname, score)');
 });
 
 db.transaction(function (tx) {
   tx.executeSql('SELECT * FROM STUDENTS', [], function (tx, results) {
    var len = results.rows.length, i;
      for (i = 0; i < len; i++){
-     msg = "<p><b>" + results.rows.item(i).sname + " "+ results.rows.item(i).score + "</b></p>";
+     msg = "<p>" + results.rows.item(i).sname + "</a> - "+ results.rows.item(i).score + "</p>";
      document.querySelector('#status').innerHTML +=  msg;
    }
  }, null);
@@ -27,6 +26,55 @@ db.transaction(function (tx) {
 </script>
 </head>
 <body>
-<div id="status" name="status">Status Message</div>
+<div id="status" name="status"></div>
+<hr/>
+
+
+
+<!-- form -->
+<h3>ADD</h3>
+<form id="add">
+<input id="inputsname" name="inputsname" type="text" value="">
+<input type="button" onclick="myFunction1()" value="SUBMIT">
+</form>
+<!--end form -->
+<hr/>
+<h3>DELETE</h3>
+<form id="delete">
+<input id="deletename" name="deletename" type="text" value="">
+<input type="button" onclick="delete1()" value="SUBMIT">
+</form>
+<hr/>
+<button onclick="drop()">drop</button>
+
+
+<script>
+function myFunction1()
+{
+var a=document.forms["add"]["inputsname"].value;
+db.transaction(function (tx) {
+  tx.executeSql('INSERT INTO STUDENTS (id, sname, score) VALUES (NULL, "' + a + '",0)');
+ });
+}
+
+function delete1()
+{
+var dn=document.forms["delete"]["deletename"].value;
+ console.log(dn);
+db.transaction(function (tx) {
+  tx.executeSql('DELETE FROM STUDENTS WHERE sname = "' + dn + '"');
+ });
+}
+
+function drop()
+{
+db.transaction(function (tx) {
+  tx.executeSql('DROP TABLE STUDENTS');
+});
+}
+</script>
+
+
+
 </body>
 </html>
