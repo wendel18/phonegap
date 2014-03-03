@@ -13,10 +13,4 @@ xml version="1.0" encoding="UTF-8" ?>
         Wendel M. Hullihen
     </author>
    
-<feature name="File">
-    <param name="android-package" value="org.apache.cordova.FileUtils" />
-</feature>
-<feature name="FileTransfer">
-    <param name="android-package" value="org.apache.cordova.FileTransfer" />
-</feature>
 </widget>
